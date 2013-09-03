@@ -1,0 +1,226 @@
+{
+    "media": [
+        {
+            "defName": "IMAGE_TOPBAR",
+            "type": "png",
+            "file": "images/TopBar.png"
+        },
+        {
+            "defName": "IMAGE_SMALLREVSPACER",
+            "type": "png",
+            "file": "images/SmallRevSpacer.png"
+        },
+        {
+            "defName": "IMAGE_SMALLREV9",
+            "type": "png",
+            "file": "images/SmallRev9.png"
+        },
+        {
+            "defName": "IMAGE_SMALLREV8",
+            "type": "png",
+            "file": "images/SmallRev8.png"
+        },
+        {
+            "defName": "IMAGE_SMALLREV7",
+            "type": "png",
+            "file": "images/SmallRev7.png"
+        },
+        {
+            "defName": "IMAGE_SMALLREV6",
+            "type": "png",
+            "file": "images/SmallRev6.png"
+        },
+        {
+            "defName": "IMAGE_SMALLREV5",
+            "type": "png",
+            "file": "images/SmallRev5.png"
+        },
+        {
+            "defName": "IMAGE_SMALLREV4",
+            "type": "png",
+            "file": "images/SmallRev4.png"
+        },
+        {
+            "defName": "IMAGE_SMALLREV3",
+            "type": "png",
+            "file": "images/SmallRev3.png"
+        },
+        {
+            "defName": "IMAGE_SMALLREV2",
+            "type": "png",
+            "file": "images/SmallRev2.png"
+        },
+        {
+            "defName": "IMAGE_SMALLREV1",
+            "type": "png",
+            "file": "images/SmallRev1.png"
+        },
+        {
+            "defName": "IMAGE_SMALLREV0",
+            "type": "png",
+            "file": "images/SmallRev0.png"
+        },
+        {
+            "defName": "IMAGE_SMALL9",
+            "type": "png",
+            "file": "images/Small9.png"
+        },
+        {
+            "defName": "IMAGE_SMALL8",
+            "type": "png",
+            "file": "images/Small8.png"
+        },
+        {
+            "defName": "IMAGE_SMALL7",
+            "type": "png",
+            "file": "images/Small7.png"
+        },
+        {
+            "defName": "IMAGE_SMALL6",
+            "type": "png",
+            "file": "images/Small6.png"
+        },
+        {
+            "defName": "IMAGE_SMALL5",
+            "type": "png",
+            "file": "images/Small5.png"
+        },
+        {
+            "defName": "IMAGE_SMALL4",
+            "type": "png",
+            "file": "images/Small4.png"
+        },
+        {
+            "defName": "IMAGE_SMALL3",
+            "type": "png",
+            "file": "images/Small3.png"
+        },
+        {
+            "defName": "IMAGE_SMALL2",
+            "type": "png",
+            "file": "images/Small2.png"
+        },
+        {
+            "defName": "IMAGE_SMALL1",
+            "type": "png",
+            "file": "images/Small1.png"
+        },
+        {
+            "defName": "IMAGE_SMALL0",
+            "type": "png",
+            "file": "images/Small0.png"
+        },
+        {
+            "defName": "IMAGE_DAYSUN",
+            "type": "png",
+            "file": "images/DaySun.png"
+        },
+        {
+            "defName": "IMAGE_DAYSAT",
+            "type": "png",
+            "file": "images/DaySat.png"
+        },
+        {
+            "defName": "IMAGE_DAYFRI",
+            "type": "png",
+            "file": "images/DayFri.png"
+        },
+        {
+            "defName": "IMAGE_DAYTHU",
+            "type": "png",
+            "file": "images/DayThu.png"
+        },
+        {
+            "defName": "IMAGE_DAYWED",
+            "type": "png",
+            "file": "images/DayWed.png"
+        },
+        {
+            "defName": "IMAGE_DAYTUE",
+            "type": "png",
+            "file": "images/DayTue.png"
+        },
+        {
+            "defName": "IMAGE_DAYMON",
+            "type": "png",
+            "file": "images/DayMon.png"
+        },
+        {
+            "defName": "IMAGE_BIGTHIN1",
+            "type": "png",
+            "file": "images/bigThin1.png"
+        },
+        {
+            "defName": "IMAGE_BIGSPACER",
+            "type": "png",
+            "file": "images/bigSpacer.png"
+        },
+        {
+            "defName": "IMAGE_BIG9",
+            "type": "png",
+            "file": "images/big9.png"
+        },
+        {
+            "defName": "IMAGE_BIG8",
+            "type": "png",
+            "file": "images/big8.png"
+        },
+        {
+            "defName": "IMAGE_BIG7",
+            "type": "png",
+            "file": "images/big7.png"
+        },
+        {
+            "defName": "IMAGE_BIG6",
+            "type": "png",
+            "file": "images/big6.png"
+        },
+        {
+            "defName": "IMAGE_BIG5",
+            "type": "png",
+            "file": "images/big5.png"
+        },
+        {
+            "defName": "IMAGE_BIG4",
+            "type": "png",
+            "file": "images/big4.png"
+        },
+        {
+            "defName": "IMAGE_BIG3",
+            "type": "png",
+            "file": "images/big3.png"
+        },
+        {
+            "defName": "IMAGE_BIG2",
+            "type": "png",
+            "file": "images/big2.png"
+        },
+        {
+            "defName": "IMAGE_BIG1",
+            "type": "png",
+            "file": "images/big1.png"
+        },
+        {
+            "defName": "IMAGE_BIG0",
+            "type": "png",
+            "file": "images/big0.png"
+        },
+        {
+            "defName": "IMAGE_PM",
+            "type": "png",
+            "file": "images/pm.png"
+        },
+        {
+            "defName": "IMAGE_AM",
+            "type": "png",
+            "file": "images/am.png"
+        },
+        {
+            "defName": "IMAGE_MENU_ICON",
+            "type": "png",
+            "file": "images/menu_icon_big_watch.png"
+        }
+    ],
+    "friendlyVersion": "VERSION",
+    "versionDefName": "APP_RESOURCES"
+}
