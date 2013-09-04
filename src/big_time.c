@@ -19,6 +19,8 @@ PBL_APP_INFO(MY_UUID, "D", "Pebble Technology", 0x5, 0x0, RESOURCE_ID_IMAGE_MENU
 
 Window window;
 
+int first_run = 1;
+
 //
 // There's only enough memory to load about 6 of 10 required images
 // so we have to swap them in & out...
@@ -29,7 +31,7 @@ Window window;
 // slot--even if the digit image is already in another slot.
 //
 //
-#define TOTAL_IMAGE_SLOTS 14
+#define TOTAL_IMAGE_SLOTS 15
 
 // DEFINE SLOTS - this is the rough layout on-screen
 // 0/1:	month	 (01 - 12)
@@ -42,6 +44,7 @@ Window window;
 // 9/10: hours	 (01 - 12)
 // 11:	colon	 (:)
 // 12/13: mins	 (00 - 59)
+// 14: 	TOPBAR
 
 // This are the different font chars (images) required for each slot
 // 0/1/2/3/4:	INV 0-9 :		(11)
@@ -50,17 +53,12 @@ Window window;
 // 8:			TINY am/pm		(2)
 // 9/10/11/12/13:BIG nn:nn		(12)
 
-#define NUMBER_OF_IMAGES 43
+#define NUMBER_OF_IMAGES 44
 
 // images
-const int IMAGE_RESOURCE_AMPM[2] = 
-{
+const int IMAGE_RESOURCE_IDS[NUMBER_OF_IMAGES] = {
 	RESOURCE_ID_IMAGE_AM,
-	RESOURCE_ID_IMAGE_PM
-};
-
-const int IMAGE_RESOURCE_BIG[12] =
-{
+	RESOURCE_ID_IMAGE_PM,
 	RESOURCE_ID_IMAGE_BIG0,
 	RESOURCE_ID_IMAGE_BIG1,
 	RESOURCE_ID_IMAGE_BIG2,
@@ -71,23 +69,15 @@ const int IMAGE_RESOURCE_BIG[12] =
 	RESOURCE_ID_IMAGE_BIG7,
 	RESOURCE_ID_IMAGE_BIG8,
 	RESOURCE_ID_IMAGE_BIG9,
+	RESOURCE_ID_IMAGE_BIGSPACER,
 	RESOURCE_ID_IMAGE_BIGTHIN1,
-	RESOURCE_ID_IMAGE_BIGSPACER
-};
-
-const int IMAGE_RESOURCE_DAYS[7] =
-{
 	RESOURCE_ID_IMAGE_DAYSUN,
 	RESOURCE_ID_IMAGE_DAYMON,
 	RESOURCE_ID_IMAGE_DAYTUE,
 	RESOURCE_ID_IMAGE_DAYWED,
 	RESOURCE_ID_IMAGE_DAYTHU,
 	RESOURCE_ID_IMAGE_DAYFRI,
-	RESOURCE_ID_IMAGE_DAYSAT
-};
-
-const int IMAGE_RESOURCE_SMALL[10] =
-{
+	RESOURCE_ID_IMAGE_DAYSAT,
 	RESOURCE_ID_IMAGE_SMALL0,
 	RESOURCE_ID_IMAGE_SMALL1,
 	RESOURCE_ID_IMAGE_SMALL2,
@@ -97,11 +87,7 @@ const int IMAGE_RESOURCE_SMALL[10] =
 	RESOURCE_ID_IMAGE_SMALL6,
 	RESOURCE_ID_IMAGE_SMALL7,
 	RESOURCE_ID_IMAGE_SMALL8,
-	RESOURCE_ID_IMAGE_SMALL9
-};
-
-const int IMAGE_RESOURCE_SMALLREV[12] =
-{
+	RESOURCE_ID_IMAGE_SMALL9,
 	RESOURCE_ID_IMAGE_SMALLREV0,
 	RESOURCE_ID_IMAGE_SMALLREV1,
 	RESOURCE_ID_IMAGE_SMALLREV2,
@@ -113,56 +99,239 @@ const int IMAGE_RESOURCE_SMALLREV[12] =
 	RESOURCE_ID_IMAGE_SMALLREV8,
 	RESOURCE_ID_IMAGE_SMALLREV9,
 	RESOURCE_ID_IMAGE_SMALLREVSPACER,
-	RESOURCE_ID_IMAGE_TOPBAR
+	RESOURCE_ID_IMAGE_TOPBAR,
+	RESOURCE_ID_IMAGE_BLANKPIXEL
 };
 
 BmpContainer image_containers[TOTAL_IMAGE_SLOTS];
 
 
 
-void update_seconds(int newval)
+void update_seconds(int newval, int mode)
 {
-	int sec1 = newval / 10 % 10;
-	int sec2 = newval % 10;
+	int tens = newval / 10 % 10;
+	int ones = newval % 10;
 
-	if (sec2 == 0)
+	if ((ones == 0) || (mode == 1))
 	{
-		layer_remove_from_parent(&image_containers[6].layer.layer);
-		bmp_deinit_container(&image_containers[6]);
+		if (mode == 0)
+		{
+			layer_remove_from_parent(&image_containers[6].layer.layer);
+			bmp_deinit_container(&image_containers[6]);
+		}
 		
-		bmp_init_container(IMAGE_RESOURCE_SMALL[sec1], &image_containers[6]);
+		bmp_init_container(IMAGE_RESOURCE_IDS[tens + 21], &image_containers[6]);
 		image_containers[6].layer.layer.frame.origin.x = 90;
 		image_containers[6].layer.layer.frame.origin.y = 40;
 		layer_add_child(&window.layer, &image_containers[6].layer.layer);
 	}
 
-	layer_remove_from_parent(&image_containers[7].layer.layer);
-	bmp_deinit_container(&image_containers[7]);
-
-	bmp_init_container(IMAGE_RESOURCE_SMALL[sec2], &image_containers[7]);
+	if (mode == 0)
+	{
+		layer_remove_from_parent(&image_containers[7].layer.layer);
+		bmp_deinit_container(&image_containers[7]);
+	}
+	
+	bmp_init_container(IMAGE_RESOURCE_IDS[ones + 21], &image_containers[7]);
 	image_containers[7].layer.layer.frame.origin.x = 120;
 	image_containers[7].layer.layer.frame.origin.y = 40;
 	layer_add_child(&window.layer, &image_containers[7].layer.layer);
 }
 
-void update_minutes(int newval)
+void update_minutes(int newval, int mode)
 {
+	int tens = newval / 10 % 10;
+	int ones = newval % 10;
+	
+	if ((ones == 0) || (mode == 1))
+	{
+		if (mode == 0)
+		{
+			layer_remove_from_parent(&image_containers[12].layer.layer);
+			bmp_deinit_container(&image_containers[12]);
+		}
+
+		bmp_init_container(IMAGE_RESOURCE_IDS[tens + 2], &image_containers[12]);
+		image_containers[12].layer.layer.frame.origin.x = 80;
+		image_containers[12].layer.layer.frame.origin.y = 93;
+		layer_add_child(&window.layer, &image_containers[12].layer.layer);
+	}
+	
+	if (mode == 0)
+	{
+		layer_remove_from_parent(&image_containers[13].layer.layer);
+		bmp_deinit_container(&image_containers[13]);
+	}
+	
+	bmp_init_container(IMAGE_RESOURCE_IDS[ones + 2], &image_containers[13]);
+	image_containers[13].layer.layer.frame.origin.x = 115;
+	image_containers[13].layer.layer.frame.origin.y = 93;
+	layer_add_child(&window.layer, &image_containers[13].layer.layer);
 
 }
 
-void update_hour(int newval)
+void update_hour(int newval, int mode)
 {
+	int val = newval;
+	
+	if (newval > 12)
+	{
+		val = newval - 12;
+	}
+	
+	int tens = val / 10 % 10;
+	int ones = val % 10;
+	
+	if ((ones == 0) || (mode == 1))
+	{
+		if (mode == 0)
+		{
+			layer_remove_from_parent(&image_containers[9].layer.layer);
+			bmp_deinit_container(&image_containers[9]);
+
+			if (newval == 0)
+			{
+				layer_remove_from_parent(&image_containers[8].layer.layer);
+				bmp_deinit_container(&image_containers[8]);
+				
+				bmp_init_container(IMAGE_RESOURCE_IDS[0], &image_containers[8]);
+				image_containers[8].layer.layer.frame.origin.x = 0;
+				image_containers[8].layer.layer.frame.origin.y = 93;
+				layer_add_child(&window.layer, &image_containers[8].layer.layer);
+			}
+			else if (newval == 12)
+			{
+				layer_remove_from_parent(&image_containers[8].layer.layer);
+				bmp_deinit_container(&image_containers[8]);
+				
+				bmp_init_container(IMAGE_RESOURCE_IDS[1], &image_containers[8]);
+				image_containers[8].layer.layer.frame.origin.x = 0;
+				image_containers[8].layer.layer.frame.origin.y = 93;
+				layer_add_child(&window.layer, &image_containers[8].layer.layer);
+			}
+		}
+		else
+		{
+			// init the am/pm if we're starting up
+			if (newval < 12)
+			{
+				bmp_init_container(IMAGE_RESOURCE_IDS[0], &image_containers[8]);
+				image_containers[8].layer.layer.frame.origin.x = 0;
+				image_containers[8].layer.layer.frame.origin.y = 93;
+				layer_add_child(&window.layer, &image_containers[8].layer.layer);
+			}
+			else
+			{
+				bmp_init_container(IMAGE_RESOURCE_IDS[1], &image_containers[8]);
+				image_containers[8].layer.layer.frame.origin.x = 0;
+				image_containers[8].layer.layer.frame.origin.y = 93;
+				layer_add_child(&window.layer, &image_containers[8].layer.layer);
+			}
+		}
+
+		if (tens < 1)
+		{
+			bmp_init_container(IMAGE_RESOURCE_IDS[43], &image_containers[9]);
+			image_containers[9].layer.layer.frame.origin.x = 20;
+			image_containers[9].layer.layer.frame.origin.y = 93;
+			layer_add_child(&window.layer, &image_containers[9].layer.layer);
+		}
+		else
+		{
+			bmp_init_container(IMAGE_RESOURCE_IDS[13], &image_containers[9]);
+			image_containers[9].layer.layer.frame.origin.x = 20;
+			image_containers[9].layer.layer.frame.origin.y = 93;
+			layer_add_child(&window.layer, &image_containers[9].layer.layer);
+		}
+		
+	}
+	
+	if (mode == 0)
+	{
+		layer_remove_from_parent(&image_containers[10].layer.layer);
+		bmp_deinit_container(&image_containers[10]);
+	}
+
+	bmp_init_container(IMAGE_RESOURCE_IDS[ones + 2], &image_containers[10]);
+	image_containers[10].layer.layer.frame.origin.x = 35;
+	image_containers[10].layer.layer.frame.origin.y = 93;
+	layer_add_child(&window.layer, &image_containers[10].layer.layer);
+}
+
+void update_day(int newval, int newdayval, int mode)
+{
+	int tens = newval / 10 % 10;
+	int ones = newval % 10;
+	
+	if ((ones == 0) || (mode == 1))
+	{
+		if (mode == 0)
+		{
+			layer_remove_from_parent(&image_containers[3].layer.layer);
+			bmp_deinit_container(&image_containers[3]);
+		}
+		
+		bmp_init_container(IMAGE_RESOURCE_IDS[tens + 31], &image_containers[3]);
+		image_containers[3].layer.layer.frame.origin.x = 75;
+		image_containers[3].layer.layer.frame.origin.y = 0;
+		layer_add_child(&window.layer, &image_containers[3].layer.layer);
+	}
+	
+	if (mode == 0)
+	{
+		layer_remove_from_parent(&image_containers[4].layer.layer);
+		bmp_deinit_container(&image_containers[4]);
+	}
+	
+	bmp_init_container(IMAGE_RESOURCE_IDS[ones + 31], &image_containers[4]);
+	image_containers[4].layer.layer.frame.origin.x = 105;
+	image_containers[4].layer.layer.frame.origin.y = 0;
+	layer_add_child(&window.layer, &image_containers[4].layer.layer);
+
+	// DAY TEXT
+	if (mode == 0)
+	{
+		layer_remove_from_parent(&image_containers[5].layer.layer);
+		bmp_deinit_container(&image_containers[5]);
+	}
+	
+	bmp_init_container(IMAGE_RESOURCE_IDS[newdayval + 14], &image_containers[5]);
+	image_containers[5].layer.layer.frame.origin.x = 0;
+	image_containers[5].layer.layer.frame.origin.y = 40;
+	layer_add_child(&window.layer, &image_containers[5].layer.layer);
 
 }
 
-void update_day(int newval, int newdayval)
+void update_month(int newval, int mode)
 {
-
-}
-
-void update_month(int newval)
-{
-
+	newval++;
+	int tens = newval / 10 % 10;
+	int ones = newval % 10;
+	
+	if ((ones == 0) || (mode == 1))
+	{
+		if (mode == 0)
+		{
+			layer_remove_from_parent(&image_containers[0].layer.layer);
+			bmp_deinit_container(&image_containers[0]);
+		}
+		
+		bmp_init_container(IMAGE_RESOURCE_IDS[tens + 31], &image_containers[0]);
+		image_containers[0].layer.layer.frame.origin.x = 0;
+		image_containers[0].layer.layer.frame.origin.y = 0;
+		layer_add_child(&window.layer, &image_containers[0].layer.layer);
+	}
+	
+	if (mode == 0)
+	{
+		layer_remove_from_parent(&image_containers[1].layer.layer);
+		bmp_deinit_container(&image_containers[1]);
+	}
+	
+	bmp_init_container(IMAGE_RESOURCE_IDS[ones + 31], &image_containers[1]);
+	image_containers[1].layer.layer.frame.origin.x = 30;
+	image_containers[1].layer.layer.frame.origin.y = 0;
+	layer_add_child(&window.layer, &image_containers[1].layer.layer);
 }
 
 
@@ -221,25 +390,25 @@ void update_month(int newval)
 // int	 tm_year	Years since 1900.
 
 
-void display_time(TimeUnits units_changed, PblTm *tick_time)
+void display_time(PblTm *tick_time, int mode)
 {
-	update_seconds(tick_time->tm_sec);
-	
-	if (units_changed & MINUTE_UNIT)
+	update_seconds(tick_time->tm_sec, mode);
+
+	if ((tick_time->tm_sec == 0) || (mode == 1))
 	{
-		update_minutes(tick_time->tm_min);
+		update_minutes(tick_time->tm_min, mode);
 		
-		if (units_changed & HOUR_UNIT)
+		if ((tick_time->tm_min == 0) || (mode == 1))
 		{
-			update_hour(tick_time->tm_hour);   
+			update_hour(tick_time->tm_hour, mode);   
    
-			if (units_changed & DAY_UNIT)
+			if ((tick_time->tm_hour == 0) || (mode == 1))
 			{
-				update_day(tick_time->tm_mday, tick_time->tm_wday);
+				update_day(tick_time->tm_mday, tick_time->tm_wday, mode);
 				
-				if (units_changed & MONTH_UNIT)
+				if ((tick_time->tm_mday == 1) || (mode == 1))
 				{
-					update_month(tick_time->tm_mon);
+					update_month(tick_time->tm_mon, mode);
 				}
 			}
 		}
@@ -249,31 +418,42 @@ void display_time(TimeUnits units_changed, PblTm *tick_time)
 
 void handle_seconds_tick(AppContextRef actxr, PebbleTickEvent *t)
 {
-	display_time(t->units_changed, t->tick_time);
+	display_time(t->tick_time, 0);
 }
 
 void handle_init(AppContextRef actxr)
 {
-	(void)actxr;
-
-	// init face (needs layers adding as they are removed then re-added when a digit changes - bit of a kludge?)
+	resource_init_current_app(&APP_RESOURCES);
+	window_init(&window, "Diesel Watchface");
+	window_stack_push(&window, true);
 	
-	// seconds first digit
-	bmp_init_container(IMAGE_RESOURCE_SMALL[1], &image_containers[6]);
-	image_containers[6].layer.layer.frame.origin.x = 90;
-	image_containers[6].layer.layer.frame.origin.y = 40;
-	layer_add_child(&window.layer, &image_containers[6].layer.layer);
-
-	// seconds second digit
-	bmp_init_container(IMAGE_RESOURCE_SMALL[1], &image_containers[7]);
-	image_containers[7].layer.layer.frame.origin.x = 120;
-	image_containers[7].layer.layer.frame.origin.y = 40;
-	layer_add_child(&window.layer, &image_containers[7].layer.layer);
-
-	TimeUnits units_changed = SECOND_UNIT|MINUTE_UNIT|HOUR_UNIT|DAY_UNIT|MONTH_UNIT|YEAR_UNIT;
+	window_set_background_color(&window, GColorBlack);
+	
+	// init face (needs images placing for items that don't change)
+	
+	// PIXEL BLOCK TOPBAR
+	bmp_init_container(IMAGE_RESOURCE_IDS[42], &image_containers[14]);
+	image_containers[14].layer.layer.frame.origin.x = 0;
+	image_containers[14].layer.layer.frame.origin.y = 0;
+	layer_add_child(&window.layer, &image_containers[14].layer.layer);
+	
+	// BIG MAIN TIME DIGITS SEPERATOR
+	bmp_init_container(IMAGE_RESOURCE_IDS[12], &image_containers[11]);
+	image_containers[11].layer.layer.frame.origin.x = 70;
+	image_containers[11].layer.layer.frame.origin.y = 113;
+	layer_add_child(&window.layer, &image_containers[11].layer.layer);
+	
+	// TOPBAR DATE SEPERATOR
+	bmp_init_container(IMAGE_RESOURCE_IDS[41], &image_containers[2]);
+	image_containers[2].layer.layer.frame.origin.x = 55;
+	image_containers[2].layer.layer.frame.origin.y = 0;
+	layer_add_child(&window.layer, &image_containers[2].layer.layer);
+	
+	
 	PblTm tick_time;
 	get_time(&tick_time);
-	display_time(units_changed, &tick_time);
+	display_time(&tick_time, 1);
+	
 }
 
 void handle_deinit(AppContextRef actxr)
@@ -285,6 +465,46 @@ void handle_deinit(AppContextRef actxr)
 
 	layer_remove_from_parent(&image_containers[7].layer.layer);
 	bmp_deinit_container(&image_containers[7]);
+	
+	layer_remove_from_parent(&image_containers[14].layer.layer);
+	bmp_deinit_container(&image_containers[14]);
+
+	layer_remove_from_parent(&image_containers[8].layer.layer);
+	bmp_deinit_container(&image_containers[8]);
+	
+	layer_remove_from_parent(&image_containers[5].layer.layer);
+	bmp_deinit_container(&image_containers[5]);
+	
+	layer_remove_from_parent(&image_containers[9].layer.layer);
+	bmp_deinit_container(&image_containers[9]);
+	
+	layer_remove_from_parent(&image_containers[10].layer.layer);
+	bmp_deinit_container(&image_containers[10]);
+	
+	layer_remove_from_parent(&image_containers[11].layer.layer);
+	bmp_deinit_container(&image_containers[11]);
+	
+	layer_remove_from_parent(&image_containers[12].layer.layer);
+	bmp_deinit_container(&image_containers[12]);
+	
+	layer_remove_from_parent(&image_containers[13].layer.layer);
+	bmp_deinit_container(&image_containers[13]);
+	
+	layer_remove_from_parent(&image_containers[0].layer.layer);
+	bmp_deinit_container(&image_containers[0]);
+	
+	layer_remove_from_parent(&image_containers[1].layer.layer);
+	bmp_deinit_container(&image_containers[1]);
+	
+	layer_remove_from_parent(&image_containers[2].layer.layer);
+	bmp_deinit_container(&image_containers[2]);
+	
+	layer_remove_from_parent(&image_containers[3].layer.layer);
+	bmp_deinit_container(&image_containers[3]);
+	
+	layer_remove_from_parent(&image_containers[4].layer.layer);
+	bmp_deinit_container(&image_containers[4]);
+	
 }
 
 void pbl_main(void *params)

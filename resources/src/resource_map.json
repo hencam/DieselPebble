@@ -1,6 +1,11 @@
 {
     "media": [
         {
+            "defName": "IMAGE_BLANKPIXEL",
+            "type": "png",
+            "file": "images/blank.png"
+        },
+        {
             "defName": "IMAGE_TOPBAR",
             "type": "png",
             "file": "images/TopBar.png"
