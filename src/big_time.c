@@ -172,14 +172,8 @@ void update_minutes(int newval, int mode)
 
 void update_hour(int newval, int mode)
 {
-	int val = newval;
-	if (val > 12)
-	{
-		val -= 12;
-	}
-	
-	int tens = val / 10 % 10;
-	int ones = val % 10;
+	int tens = newval / 10 % 10;
+	int ones = newval % 10;
 	
 	if (mode == 0)
 	{
@@ -189,58 +183,19 @@ void update_hour(int newval, int mode)
 		layer_remove_from_parent(&image_containers[10].layer.layer);
 		bmp_deinit_container(&image_containers[10]);
 	}
-	else
-	{
-		// init the am/pm if we're starting up
-		if (newval < 12)
-		{
-			bmp_init_container(IMAGE_RESOURCE_IDS[0], &image_containers[8]);
-			image_containers[8].layer.layer.frame.origin.x = 0;
-			image_containers[8].layer.layer.frame.origin.y = 93;
-			layer_add_child(&window.layer, &image_containers[8].layer.layer);
-		}
-		else
-		{
-			bmp_init_container(IMAGE_RESOURCE_IDS[1], &image_containers[8]);
-			image_containers[8].layer.layer.frame.origin.x = 0;
-			image_containers[8].layer.layer.frame.origin.y = 93;
-			layer_add_child(&window.layer, &image_containers[8].layer.layer);
-		}
-	}
 	
-	// only change AM/PM at midnight or midday
-	if (newval == 0)
-	{
-		layer_remove_from_parent(&image_containers[8].layer.layer);
-		bmp_deinit_container(&image_containers[8]);
-		
-		bmp_init_container(IMAGE_RESOURCE_IDS[0], &image_containers[8]);
-		image_containers[8].layer.layer.frame.origin.x = 0;
-		image_containers[8].layer.layer.frame.origin.y = 93;
-		layer_add_child(&window.layer, &image_containers[8].layer.layer);
-	}
-	else if (newval == 12)
-	{
-		layer_remove_from_parent(&image_containers[8].layer.layer);
-		bmp_deinit_container(&image_containers[8]);
-		
-		bmp_init_container(IMAGE_RESOURCE_IDS[1], &image_containers[8]);
-		image_containers[8].layer.layer.frame.origin.x = 0;
-		image_containers[8].layer.layer.frame.origin.y = 93;
-		layer_add_child(&window.layer, &image_containers[8].layer.layer);
-	}
 	
 	if (tens == 0)
 	{
 		bmp_init_container(IMAGE_RESOURCE_IDS[43], &image_containers[9]);
-		image_containers[9].layer.layer.frame.origin.x = 20;
+		image_containers[9].layer.layer.frame.origin.x = 0;
 		image_containers[9].layer.layer.frame.origin.y = 93;
 		layer_add_child(&window.layer, &image_containers[9].layer.layer);
 	}
 	else
 	{
-		bmp_init_container(IMAGE_RESOURCE_IDS[13], &image_containers[9]);
-		image_containers[9].layer.layer.frame.origin.x = 20;
+		bmp_init_container(IMAGE_RESOURCE_IDS[tens + 2], &image_containers[9]);
+		image_containers[9].layer.layer.frame.origin.x = 0;
 		image_containers[9].layer.layer.frame.origin.y = 93;
 		layer_add_child(&window.layer, &image_containers[9].layer.layer);
 	}
@@ -266,12 +221,12 @@ void update_day(int newval, int newdayval, int mode)
 	}
 	
 	bmp_init_container(IMAGE_RESOURCE_IDS[tens + 31], &image_containers[3]);
-	image_containers[3].layer.layer.frame.origin.x = 75;
+	image_containers[3].layer.layer.frame.origin.x = 0;
 	image_containers[3].layer.layer.frame.origin.y = 0;
 	layer_add_child(&window.layer, &image_containers[3].layer.layer);
 	
 	bmp_init_container(IMAGE_RESOURCE_IDS[ones + 31], &image_containers[4]);
-	image_containers[4].layer.layer.frame.origin.x = 105;
+	image_containers[4].layer.layer.frame.origin.x = 30;
 	image_containers[4].layer.layer.frame.origin.y = 0;
 	layer_add_child(&window.layer, &image_containers[4].layer.layer);
 
@@ -305,12 +260,12 @@ void update_month(int newval, int mode)
 	}
 	
 	bmp_init_container(IMAGE_RESOURCE_IDS[tens + 31], &image_containers[0]);
-	image_containers[0].layer.layer.frame.origin.x = 0;
+	image_containers[0].layer.layer.frame.origin.x = 75;
 	image_containers[0].layer.layer.frame.origin.y = 0;
 	layer_add_child(&window.layer, &image_containers[0].layer.layer);
 	
 	bmp_init_container(IMAGE_RESOURCE_IDS[ones + 31], &image_containers[1]);
-	image_containers[1].layer.layer.frame.origin.x = 30;
+	image_containers[1].layer.layer.frame.origin.x = 105;
 	image_containers[1].layer.layer.frame.origin.y = 0;
 	layer_add_child(&window.layer, &image_containers[1].layer.layer);
 }
@@ -369,6 +324,7 @@ void update_month(int newval, int mode)
 // int	 tm_wday	Day since Sunday. 
 // int	 tm_yday	Days since January 1. 
 // int	 tm_year	Years since 1900.
+
 
 void display_time(PblTm *tick_time, int mode)
 {
@@ -449,9 +405,6 @@ void handle_deinit(AppContextRef actxr)
 	layer_remove_from_parent(&image_containers[14].layer.layer);
 	bmp_deinit_container(&image_containers[14]);
 
-	layer_remove_from_parent(&image_containers[8].layer.layer);
-	bmp_deinit_container(&image_containers[8]);
-	
 	layer_remove_from_parent(&image_containers[5].layer.layer);
 	bmp_deinit_container(&image_containers[5]);
 	
